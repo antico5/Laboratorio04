@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ListaDepartamentosActivity" />
-        <activity android:name=".AltaReservaActivity"></activity>
+        <activity android:name=".AltaReservaActivity" />
+        <activity android:name=".utils.ListarReservasActivity"></activity>
     </application>
 
 </manifest>
