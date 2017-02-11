@@ -35,6 +35,5 @@ public class DepartamentoAdapter extends ArrayAdapter<Departamento> {
         TextView txtCapacidad = (TextView) row.findViewById(R.id.capacidadMax);
         txtCapacidad.setText(this.getItem(position).getCapacidadMaxima()+".");
         return (row);
-
     }
 }

@@ -24,10 +24,14 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.laboratorio04.modelo.Ciudad;
+import dam.isi.frsf.utn.edu.ar.laboratorio04.modelo.Reserva;
 import dam.isi.frsf.utn.edu.ar.laboratorio04.utils.FormBusqueda;
+import dam.isi.frsf.utn.edu.ar.laboratorio04.utils.ListarReservasActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private EditText txtHuespedes;
     private Switch swFumadores;
     private FormBusqueda frmBusq;
+    private ArrayList<Reserva> reservas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,8 @@ public class MainActivity extends AppCompatActivity
 
         btnBuscar = (Button) findViewById(R.id.btnBuscar);
         btnBuscar.setOnClickListener(btnBusarListener);
+
+        reservas = new ArrayList<>();
     }
 
     private View.OnClickListener btnBusarListener = new View.OnClickListener() {
@@ -176,6 +183,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_perfil:
                 break;
             case R.id.nav_reservas:
+                Intent i = new Intent(MainActivity.this, ListarReservasActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("reservas", reservas);
+                i.putExtras(b);
+                startActivity(i);
                 break;
             case R.id.nav_destinos:
                 break;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -19,7 +20,7 @@ public class ReservaAdapter extends ArrayAdapter<Reserva> {
     private Context contexto;
 
     public ReservaAdapter(Context contexto, List<Reserva> items) {
-        super(contexto, R.layout.fila, items);
+        super(contexto, R.layout.reserva, items);
         inflater = LayoutInflater.from(contexto);
     }
 
@@ -29,17 +30,21 @@ public class ReservaAdapter extends ArrayAdapter<Reserva> {
         SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 
         View row = convertView;
-        if (row == null) row = inflater.inflate(R.layout.fila, parent, false);
+        if (row == null) row = inflater.inflate(R.layout.reserva, parent, false);
 
+        Reserva reserva = this.getItem(position);
 
-        TextView txtCiudad = (TextView) row.findViewById(R.id.ciudad);
-        txtCiudad.setText(this.getItem(position).getCiudad().getNombre());
-        TextView txtDescripcion = (TextView) row.findViewById(R.id.descripcion);
-        txtDescripcion.setText("Unico!! " + this.getItem(position).getDescripcion());
-        TextView txtPrecio = (TextView) row.findViewById(R.id.precio);
-        txtPrecio.setText("$" + (df.format(this.getItem(position).getPrecio())));
-        TextView txtCapacidad = (TextView) row.findViewById(R.id.capacidadMax);
-        txtCapacidad.setText(this.getItem(position).getCapacidadMaxima()+".");
+        TextView fechaFinTextView = (TextView) row.findViewById(R.id.fechaFinTextView);
+        fechaFinTextView.setText("Fin: " + dt.format(reserva.getFechaFin()));
+        TextView fechaInicioTextView = (TextView) row.findViewById(R.id.fechaInicioTextView);
+        fechaInicioTextView.setText("Inicio: " + dt.format(reserva.getFechaInicio()));
+        TextView departamentoTextView = (TextView) row.findViewById(R.id.departamentoTextView);
+        departamentoTextView.setText("Ciudad: "+ reserva.getAlojamiento().getCiudad());
+        TextView precioTextView = (TextView) row.findViewById(R.id.precioTextView);
+        precioTextView.setText("Precio: " + df.format(reserva.getPrecio()));
+        CheckBox confirmadaCheckBox = (CheckBox) row.findViewById(R.id.confirmadaCheckBox);
+        confirmadaCheckBox.setChecked(reserva.getConfirmada());
+
         return (row);
     }
 }
