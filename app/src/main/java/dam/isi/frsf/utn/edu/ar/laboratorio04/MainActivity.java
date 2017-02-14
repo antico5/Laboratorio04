@@ -1,9 +1,13 @@
 package dam.isi.frsf.utn.edu.ar.laboratorio04;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
@@ -23,9 +27,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.laboratorio04.modelo.Ciudad;
@@ -35,6 +41,8 @@ import dam.isi.frsf.utn.edu.ar.laboratorio04.utils.ListarReservasActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    static final int LISTAR_DEPARTAMENTOS = 3;
 
     private Button btnBuscar;
     private Spinner cmbCiudad;
@@ -85,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         btnBuscar.setOnClickListener(btnBusarListener);
 
         reservas = new ArrayList<>();
+
     }
 
     private View.OnClickListener btnBusarListener = new View.OnClickListener() {
@@ -92,10 +101,16 @@ public class MainActivity extends AppCompatActivity
         public void onClick(View view) {
             Intent i = new Intent(MainActivity.this,ListaDepartamentosActivity.class);
             frmBusq.setPermiteFumar(swFumadores.isSelected());
-            frmBusq.setHuespedes(Integer.parseInt(txtHuespedes.getText().toString()));
+            Integer huespedes = null;
+            try {
+                huespedes = Integer.parseInt(txtHuespedes.getText().toString());
+            } catch (NumberFormatException e) {
+                huespedes = null;
+            }
+            frmBusq.setHuespedes(huespedes);
             i.putExtra("esBusqueda",true);
             i.putExtra("frmBusqueda",frmBusq);
-            startActivity(i);
+            startActivityForResult(i, LISTAR_DEPARTAMENTOS);
         }
     };
 
@@ -176,11 +191,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_deptos:
                 Intent i1 = new Intent(MainActivity.this,ListaDepartamentosActivity.class);
                 i1.putExtra("esBusqueda",false );
-                startActivity(i1);
+                startActivityForResult(i1, LISTAR_DEPARTAMENTOS);
                 break;
             case R.id.nav_ofertas:
                 break;
             case R.id.nav_perfil:
+                Intent i2 = new Intent(this, SettingsActivity.class);
+                startActivity(i2);
                 break;
             case R.id.nav_reservas:
                 Intent i = new Intent(MainActivity.this, ListarReservasActivity.class);
@@ -196,5 +213,30 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == LISTAR_DEPARTAMENTOS && resultCode == RESULT_OK) {
+            Reserva reserva = (Reserva) data.getExtras().get("reserva");
+            Log.d("reserva", reserva.toString());
+            reservas.add(reserva);
+
+            Toast toast = Toast.makeText(getApplicationContext(), "Reserva registrada correctamente.", Toast.LENGTH_LONG);
+            toast.show();
+
+            setAlarma();
+            return;
+        }
+    }
+
+    private void setAlarma() {
+        Intent i = new Intent(this, TestReciver.class);
+        Bundle b = new Bundle();
+        b.putSerializable("reservas", reservas);
+        i.putExtras(b);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, i, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 0, 15000, pendingIntent);
     }
 }

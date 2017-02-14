@@ -55,6 +55,7 @@ public class Reserva implements Serializable {
 
     public void setAlojamiento(Departamento  alojamiento) {
         this.departamento = alojamiento;
+        this.precio = alojamiento.getPrecio();
     }
 
     public Double getPrecio() {
@@ -82,4 +83,13 @@ public class Reserva implements Serializable {
         this.confirmada = confirmada;
     }
 
+    public String toString() {
+        return "Rserva{" +
+                "id=" + id +
+                ", precio=" + precio +
+                ", inicio='" + fechaInicio.toString() + '\'' +
+                ", fin='" + fechaFin.toString() + '\'' +
+                ", confirmada=" + confirmada +
+                '}';
+    }
 }

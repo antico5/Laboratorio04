@@ -52,9 +52,9 @@ public class BuscarDepartamentosTask extends AsyncTask<FormBusqueda,Integer,List
                 continue;
             if ( busq.getPrecioMaximo() != null && busq.getPrecioMaximo() < depto.getPrecio())
                 continue;
-            //if ( busq.getCiudad() != null && busq.getCiudad() != depto.getCiudad())
-            //    continue;
-            if ( busq.getPermiteFumar() &&  depto.getNoFumador())
+            if ( busq.getCiudad() != null && !busq.getCiudad().equals(depto.getCiudad()))
+                continue;
+            if ( busq.getPermiteFumar() && depto.getNoFumador())
                 continue;
             resultado.add(depto);
         }

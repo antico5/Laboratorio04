@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dam.isi.frsf.utn.edu.ar.laboratorio04">
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".TestReciver"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main2"
@@ -17,9 +23,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListaDepartamentosActivity" />
-        <activity android:name=".AltaReservaActivity" />
-        <activity android:name=".utils.ListarReservasActivity"></activity>
+        <activity
+            android:name=".ListaDepartamentosActivity"
+            android:label="@string/activity_listar_departamentos" />
+        <activity
+            android:name=".AltaReservaActivity"
+            android:label="@string/activity_alta_reserva" />
+        <activity
+            android:name=".utils.ListarReservasActivity"
+            android:label="@string/activity_listar_reservas" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
